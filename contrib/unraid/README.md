@@ -30,7 +30,7 @@ cd /boot/config/plugins/dockerMan/templates-user/
 
 #### Option A: Download from Repository
 ```bash
-wget https://raw.githubusercontent.com/t-mart/mousehole/master/unraid/my-mousehole.xml
+wget https://raw.githubusercontent.com/t-mart/mousehole/master/contrib/unraid/my-mousehole.xml
 ```
 
 #### Option B: Create Template Manually
@@ -54,7 +54,9 @@ Enter - Save File Name
 
 If you use the Unraid WebUI link at `http://[IP]:[PORT:5010]`, set the
 template's **Allowed Hosts** field to the exact Unraid IP address or hostname
-you use in the browser.
+you use in the browser. Manually set webui link to your http://Unraid Server IP:5010
+and add your server IP address to **Allowed Hosts** if routing Mousehole through
+a VPN container.
 
 Normal same-origin LAN access does not usually require
 `MOUSEHOLE_ALLOWED_ORIGINS`. See the
@@ -73,5 +75,11 @@ If you're running mousehole through qBittorrent's VPN connection using `network_
 1. **Expose port 5010 through qBittorrent** - Add `-p 127.0.0.1:5010:5010` to qBittorrent's docker run command, or add `127.0.0.1:5010:5010` to qBittorrent's ports in docker-compose
 2. **Remove mousehole's port mapping** - Don't publish port `5010` on mousehole since it's using qBittorrent's network
 3. **Allow LAN access only if needed** - Keep authentication enabled and add the environment variable to qBittorrent to expose the port on your local network (exact variable depends on your qBittorrent container image)
+
+**[Hotio Specific]**
+1. Add `5010` to qBittorrent's **Ports** so the port is published to the                                     
+host (in addition to qBittorrent's own 8080).                                                                   
+2. Add `5010/tcp` to **`VPN_EXPOSE_PORTS_ON_LAN`**.                                                                
+3. Add your LAN subnet to **`VPN_LAN_NETWORK`**, e.g. `192.168.1.0/24`.
 
 Mousehole will be accessible at `http://localhost:5010`
